@@ -3,10 +3,10 @@ class ChildProcessExecArgv{
         this.process = prs || process;
         this.childDebuggble = true;
         this.inspectPort = 9229;
-        this.childDebuggbleFlag = 'child-debugger';
+        this.childDebuggbleFlag = '--child-debugger';
     }
     getFlag(){
-        const flagArg = this.process.execArgv.find(arg=>arg.indexOf('child-debugger') ==0);
+        const flagArg = this.process.execArgv.find(arg=>arg.indexOf('--child-debugger=') ==0);
         if (flagArg){
             return (flagArg.indexOf('enabled')!=-1)
         }
@@ -14,14 +14,14 @@ class ChildProcessExecArgv{
     }
     getExecArgv(){
         const execArgv = [].concat(this.process.execArgv);
-        const foundBrkIndex = execArgv.findIndex(arg =>arg.indexOf('inspect-brk=')==0);
+        const foundBrkIndex = execArgv.findIndex(arg =>arg.indexOf('--inspect-brk=')==0);
         const isChildRequestedDebug = foundBrkIndex !=-1;
         const childDebugFlag = this.getFlag();
 
         const childDebuggble = childDebugFlag == null ? this.childDebuggble : childDebugFlag;
         if (childDebuggble && isChildRequestedDebug){
             //Fix inspect
-            execArgv[foundBrkIndex] = `inspect-brk=${this.inspectPort}`;
+            execArgv[foundBrkIndex] = `--inspect-brk=${this.inspectPort}`;
         }
         else if (!childDebuggble&& isChildRequestedDebug){
             //Remove brk when needed

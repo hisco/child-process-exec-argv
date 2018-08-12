@@ -2,9 +2,9 @@
 declare module ChildProcessExecArgv {
     export function getExecArgv():string[];
     export class ChildProcessExecArgv{
-        constructor(process?:Process);
+        constructor(process?:NodeJS.Process);
         getExecArgv():string[];
-        process:Process;
+        process:NodeJS.Process;
         childDebuggble:boolean;
         inspectPort:number|string;
         childDebuggbleFlag:string;
