@@ -14,6 +14,27 @@ describe('ChildProcessExecArgv' , ()=>{
         childProcessExecArgv = new ChildProcessExecArgv(fakeProcess);
     });
 
+    describe('#setPortIncrement' , ()=>{
+        it('Should set state portAlgo to increment', ()=>{
+            childProcessExecArgv.setPortIncrement();
+
+            expect(childProcessExecArgv.portAlgo).to.eq('increment');
+        });
+    });
+    describe('#setRandomPort' , ()=>{
+        it('Should set state portAlgo to random', ()=>{
+            childProcessExecArgv.setRandomPort();
+
+            expect(childProcessExecArgv.portAlgo).to.eq('random');
+        });
+    });
+    describe('#setStaticPort' , ()=>{
+        it('Should set state portAlgo to static', ()=>{
+            childProcessExecArgv.setStaticPort();
+
+            expect(childProcessExecArgv.portAlgo).to.eq('static');
+        });
+    });
     describe('#getFlag' , ()=>{
         it('Should be positive if flag exists and enabled', ()=>{
             fakeProcess.execArgv.push('--child-debugger=enabled');

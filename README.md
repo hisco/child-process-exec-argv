@@ -12,6 +12,7 @@ You will find you need to change the argsv of your child process - code modifica
 It's not recommended for most projects to be framilier with the required code modification.
 
 This is when this module comes in handy, it will do the dirty code modifications for you.
+Including assigning random ports to child process.
 
 ##Simple usage
 The following usage should be enough to most projects.
@@ -69,6 +70,10 @@ Take exec argv for this module and forward it to the fork function
 ```
 
 Happy debugging!
+
+##Debug with WebStorm
+Webstorm is doing a great job with debugging child processes, altough possible to use both we didn't find a reason to use this module while using webstorm.
+
 
 ## License
 

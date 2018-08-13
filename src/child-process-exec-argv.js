@@ -4,6 +4,27 @@ class ChildProcessExecArgv{
         this.childDebuggble = true;
         this.inspectPort = 9229;
         this.childDebuggbleFlag = '--child-debugger';
+        this.portAlgo = 'increment';
+        this.portIndex = 0;
+    }
+    setPortIncrement(){
+        this.portAlgo = 'increment';
+    }
+    setRandomPort(){
+        this.portAlgo = 'random';
+    }
+    setStaticPort(){
+        this.portAlgo = 'static';
+    }
+    getPort(){
+        if (this.portAlgo == 'increment'){
+            return this.inspectPort + ++this.portIndex;
+        }
+        else if (this.portAlgo == 'random'){
+            return Math.floor((Math.random() * 9999) + 9230);
+        }
+        else 
+            return this.inspectPort;
     }
     getFlag(){
         const flagArg = this.process.execArgv.find(arg=>arg.indexOf('--child-debugger=') ==0);
