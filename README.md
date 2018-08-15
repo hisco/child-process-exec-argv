@@ -12,7 +12,7 @@ You will find you need to change the argsv of your child process - code modifica
 It's not recommended for most projects to be framilier with the required code modification.
 
 This is when this module comes in handy, it will do the dirty code modifications for you.
-Including assigning random ports to child process.
+Including assigning random ports to child process, while validating that these are free.
 
 ##Simple usage
 The following usage should be enough to most projects.
@@ -20,7 +20,15 @@ The following usage should be enough to most projects.
     const childProcessExecArgv = require('child-process-exec-argv');
 
     const subprocess = require('child_process').fork('subprocess.js' , [] , {
-        execArgv : childProcessExecArgv.getExecArgv()
+        execArgv : await childProcessExecArgv.getExecArgv()
+    });
+```
+If you must have *sync* result you can use the sync methods, just know that the async method will validate that the random port is valid, while sync method cannot.
+```js
+    const childProcessExecArgv = require('child-process-exec-argv');
+
+    const subprocess = require('child_process').fork('subprocess.js' , [] , {
+        execArgv : childProcessExecArgv.syncGetExecArgv()
     });
 ```
 
@@ -45,7 +53,7 @@ You can overide this behavior by:
     childProcessExecArgv.childDebuggble = false;
 
     const subprocess = require('child_process').fork('subprocess.js' , [] , {
-        execArgv : childProcessExecArgv.getExecArgv()
+        execArgv : await childProcessExecArgv.getExecArgv()
     });
 
 ```
@@ -65,7 +73,7 @@ Take exec argv for this module and forward it to the fork function
     const childProcessExecArgv = require('child-process-exec-argv');
 
     const subprocess = require('child_process').fork('subprocess.js' , [] , {
-        execArgv : childProcessExecArgv.getExecArgv()
+        execArgv : await childProcessExecArgv.getExecArgv()
     });
 ```
 
