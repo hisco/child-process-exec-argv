@@ -52,12 +52,35 @@ describe('ChildProcessExecArgv' , ()=>{
         });
     });
 
+    describe('#syncGetPort' , ()=>{
+        it('Should get incremented', ()=>{
+            childProcessExecArgv.inspectPort = 1;
+            childProcessExecArgv.portAlgo = 'increment';
+
+            expect(childProcessExecArgv.syncGetPort()).to.eq(1);
+            expect(childProcessExecArgv.syncGetPort()).to.eq(2);
+        })
+        it('Should get random', ()=>{
+            childProcessExecArgv.inspectPort = 1;
+            childProcessExecArgv.portAlgo = 'random';
+
+            expect(childProcessExecArgv.syncGetPort()).not.to.eq(1);
+        });
+        it('Should get incremented', ()=>{
+            childProcessExecArgv.inspectPort = 1;
+            childProcessExecArgv.portAlgo = 'static';
+
+            expect(childProcessExecArgv.syncGetPort()).to.eq(1);
+            expect(childProcessExecArgv.syncGetPort()).to.eq(1);
+        })
+    });
     describe('#syncGetExecArgv' , ()=>{
         it('Should fix inspect by default if current process is requested with debug',()=>{
             fakeProcess.execArgv = [
                 '--inspect-brk=10'
             ];
 
+            childProcessExecArgv.setPortIncrement();
             const result = childProcessExecArgv.syncGetExecArgv();
             expect(result.length).to.eq(1);
             expect(result[0]).to.eq('--inspect-brk=' + childProcessExecArgv.inspectPort);
@@ -68,6 +91,7 @@ describe('ChildProcessExecArgv' , ()=>{
                 '--child-debugger=enabled'
             ];
 
+            childProcessExecArgv.setPortIncrement();
             const result = childProcessExecArgv.syncGetExecArgv();
             expect(result.length).to.eq(2);
             expect(result[0]).to.eq('--inspect-brk=' + childProcessExecArgv.inspectPort);
@@ -78,7 +102,9 @@ describe('ChildProcessExecArgv' , ()=>{
                 '--child-debugger=disabled'
             ];
 
+            childProcessExecArgv.setPortIncrement();
             const result = childProcessExecArgv.syncGetExecArgv();
+
             expect(result.length).to.eq(1);
             expect(result[0]).to.eq('--child-debugger=disabled');
         });
@@ -86,13 +112,36 @@ describe('ChildProcessExecArgv' , ()=>{
             fakeProcess.execArgv = [
             ];
 
+            childProcessExecArgv.setPortIncrement();
             const result = childProcessExecArgv.syncGetExecArgv();
+
             expect(result.length).to.eq(0);
         });
     });
 
 
+    describe('#getPort' , ()=>{
+        it('Should get incremented', async ()=>{
+            childProcessExecArgv.inspectPort = 1;
+            childProcessExecArgv.portAlgo = 'increment';
 
+            expect(await childProcessExecArgv.getPort()).to.eq(1);
+            expect(await childProcessExecArgv.getPort()).to.eq(2);
+        })
+        it('Should get random', async ()=>{
+            childProcessExecArgv.inspectPort = 1;
+            childProcessExecArgv.portAlgo = 'random';
+
+            expect(await childProcessExecArgv.getPort()).not.to.eq(1);
+        });
+        it('Should get incremented', async ()=>{
+            childProcessExecArgv.inspectPort = 1;
+            childProcessExecArgv.portAlgo = 'static';
+
+            expect(await childProcessExecArgv.getPort()).to.eq(1);
+            expect(await childProcessExecArgv.getPort()).to.eq(1);
+        })
+    });
 
     describe('#getExecArgv' , ()=>{
         it('Should fix inspect by default if current process is requested with debug',async ()=>{
@@ -100,6 +149,7 @@ describe('ChildProcessExecArgv' , ()=>{
                 '--inspect-brk=10'
             ];
 
+            childProcessExecArgv.setPortIncrement();
             const result = await childProcessExecArgv.getExecArgv();
             expect(result.length).to.eq(1);
             expect(result[0]).to.eq('--inspect-brk=' + childProcessExecArgv.inspectPort);
@@ -110,6 +160,8 @@ describe('ChildProcessExecArgv' , ()=>{
                 '--child-debugger=enabled'
             ];
 
+            childProcessExecArgv.setPortIncrement();
+
             const result = await childProcessExecArgv.getExecArgv();
             expect(result.length).to.eq(2);
             expect(result[0]).to.eq('--inspect-brk=' + childProcessExecArgv.inspectPort);
@@ -119,6 +171,7 @@ describe('ChildProcessExecArgv' , ()=>{
                 '--inspect-brk=10',
                 '--child-debugger=disabled'
             ];
+            childProcessExecArgv.setPortIncrement();
 
             const result = await childProcessExecArgv.getExecArgv();
             expect(result.length).to.eq(1);
@@ -127,6 +180,7 @@ describe('ChildProcessExecArgv' , ()=>{
         it('Shouldn\'t fix inspect if flag not exists and if current process isn\'t requested with debug',async ()=>{
             fakeProcess.execArgv = [
             ];
+            childProcessExecArgv.setPortIncrement();
 
             const result = await childProcessExecArgv.getExecArgv();
             expect(result.length).to.eq(0);

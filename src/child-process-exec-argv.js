@@ -4,7 +4,7 @@ class ChildProcessExecArgv{
         this.childDebuggble = true;
         this.inspectPort = 9229;
         this.childDebuggbleFlag = '--child-debugger';
-        this.portAlgo = 'increment';
+        this.portAlgo = 'random';
         this.portIndex = 0;
     }
     static getTestedPort(from , to , cb){
@@ -14,7 +14,7 @@ class ChildProcessExecArgv{
         if (from == to)
             cb(new Error('Cannot find a free port on the system'));
 
-        let server = net.createServer()
+        let server = require('net').createServer()
         server.listen(port, function (err) {
             server.once('close', function () {
                 cb(null,port)
