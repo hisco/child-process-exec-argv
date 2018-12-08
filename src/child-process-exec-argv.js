@@ -73,8 +73,8 @@ class ChildProcessExecArgv{
         }
         else return null;
     }
-    syncGetExecArgv(){
-        const execArgv = [].concat(this.process.execArgv);
+    syncGetExecArgv(userParams){
+        const execArgv = [].concat(this.process.execArgv, userParams || []);
         const foundBrkIndex = execArgv.findIndex(arg =>arg.indexOf('--inspect-brk=')==0);
         const isChildRequestedDebug = foundBrkIndex !=-1;
         const childDebugFlag = this.getFlag();
@@ -91,8 +91,8 @@ class ChildProcessExecArgv{
 
         return execArgv
     }
-    async getExecArgv(){
-        const execArgv = [].concat(this.process.execArgv);
+    async getExecArgv(userParams){
+        const execArgv = [].concat(this.process.execArgv , userParams || []);
         const foundBrkIndex = execArgv.findIndex(arg =>arg.indexOf('--inspect-brk=')==0);
         const isChildRequestedDebug = foundBrkIndex !=-1;
         const childDebugFlag = this.getFlag();
