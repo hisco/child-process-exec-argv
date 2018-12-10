@@ -15,7 +15,7 @@ class ChildProcessExecArgv{
             cb(new Error('Cannot find a free port on the system'));
 
         let server = require('net').createServer()
-        server.listen(port, function onListen (err) {
+        server.listen(port, ()=> {
             if (err){
                 this.getPort(from , to , cb);
             }
