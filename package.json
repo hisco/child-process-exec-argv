@@ -1,6 +1,6 @@
 {
   "name": "child-process-exec-argv",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Better handling child process exec argv",
   "main": "src/index.js",
   "types": "src/index.d.ts",

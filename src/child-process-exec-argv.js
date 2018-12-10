@@ -7,7 +7,7 @@ class ChildProcessExecArgv{
         this.portAlgo = 'random';
         this.portIndex = 0;
     }
-    static getTestedPort(from , to , cb){
+    getTestedPort(from , to , cb){
         let port = from;
         from++;
 
@@ -15,14 +15,16 @@ class ChildProcessExecArgv{
             cb(new Error('Cannot find a free port on the system'));
 
         let server = require('net').createServer()
-        server.listen(port, function (err) {
-            server.once('close', function () {
-                cb(null,port)
-            })
-            server.close()
-        })
-        server.on('error', function (err) {
-            getPort(from , to , cb);
+        server.listen(port, function onListen (err) {
+            if (err){
+                this.getPort(from , to , cb);
+            }
+            else{
+                server.once('close', function onClose () {
+                    cb(null,port)
+                })
+                server.close()
+            }
         })
     }
     setPortIncrement(){
@@ -50,7 +52,7 @@ class ChildProcessExecArgv{
         }
         else if (this.portAlgo == 'random'){
             return await new Promise((resolve, reject)=>{
-                ChildProcessExecArgv.getTestedPort(
+                this.getTestedPort(
                     Math.floor((Math.random() * 9999) + this.inspectPort),
                     9999,
                     (error,port)=>{
